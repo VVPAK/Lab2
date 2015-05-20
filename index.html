@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	
+	<style type = "text/css">
+		table {
+			border: 1px solid black;
+		}
+	</style>
+
+	<script type="text/javascript">
+
+		function Game() {
+			this.cols = parseInt(document.getElementById("col").value);
+			this.rows = parseInt(document.getElementById("row").value);
+
+			this.board = [];
+			for (var i = 0; i < this.cols; i++) {
+				this.board[i] = [];
+				for (var j = 0; j < this.rows; j++) {
+			 		this.board[i][j] = new Cell(null);
+			 	}
+			 }
+			console.log("board created");
+
+			function Cell(fig) {
+				this.cellFigure = fig;
+			}
+
+			function Figure(name) {
+				this.name = name;
+			}
+
+			//------------------------
+
+			this.setCols = function(col) {
+				this.cols = col;
+			} 
+
+			this.setRows = function(row) {
+				this.rows = row;
+			}
+
+			this.addFigure = function(col, row, name) {
+				this.board[col - 1][row - 1].cellFigure = new Figure(name);
+				console.log("add figure works");
+			}
+
+			this.render = function() {
+				console.log("render started");
+				var body = document.body;
+				var table = document.createElement("table");
+				for (var i = 0; i < this.rows; i++) {
+					var tr = table.insertRow();
+					for (var j = 0; j < this.cols; j++) {
+						var td = tr.insertCell();
+						
+						//td.appendChild(document.createTextNode('Cell #' + ' ' + (i * col + j + 1)));
+						td.style.width = "100px";
+						td.style.height = "100px";
+						if ((i + j) % 2 == 0) {
+							td.style.background = "black";
+
+						} else {
+							td.style.background = "white";
+						}
+						if (this.board[i][j].cellFigure != null) {
+							//alert("is not null");
+							td.appendChild(document.createTextNode(this.board[i][j].cellFigure.name));
+							td.style.color =  "red";
+						}
+					}
+				}
+				body.appendChild(table);	
+			}
+		}
+
+		var myGame;
+
+		function generate() {
+			console.log("render func works");
+			myGame = new Game();
+			myGame.render();
+		}
+
+		function addFigure() {
+			var col = parseInt(document.getElementById("ccol").value);
+			var row = parseInt(document.getElementById("crow").value);
+			var name = document.getElementById("fname").value;
+			console.log("Adding figure with" + col + " " + row + " " + name);
+			myGame.addFigure(col,row,name);
+			myGame.render();
+		}
+
+	</script>
+
+	<title>Table generator</title>
+</head>
+
+<body>
+	Column<input type = "text" id = "col"/><br>
+	Row<input type = "text" id = "row"/><br>
+	<button onclick = "generate()">Generate</button>
+	<br/>
+	To color
+	Column<input type = "text" id = "ccol"/><br>
+	Row<input type = "text" id = "crow"/><br>
+	Name<input type = "text" id = "fname"/><br>
+	<button onclick = "addFigure()">Color</button>
+</body>
+
+</html>
